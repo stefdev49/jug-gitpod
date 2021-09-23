@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Prêt à décoller avec gitpod</title>
+        <link rel="icon" href="img/favicon256.png" />
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/white.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+                <section>
+                    <img data-src="img/gitpod.jpg" size="contain">
+                </section>
+                <section>
+                  <h3>Deux façons de le lancer</h3>
+                  <ul>
+                    <li>URL préfixée avec <em>gitpod.io/#</em></li>
+                    <li>Extension chrome & firefox</li>
+                  </ul>
+                </section>
+                <section>
+                  <h3>Compatibilité navigateurs</h3>
+                  <ul>
+                    <li>Firefox</li>
+                    <li>Google Chrome</li>
+                    <li>Microsoft Edge (chromium)</li>
+                    <li>Safari</li>
+                  </ul>
+                </section>
+                <section>
+                  <h3>Intégration authentification</h3>
+                  <ul>
+                    <li>gitlab</li>
+                    <li>github</li>
+                    <li>bitbucket</li>
+                  </ul>
+                </section>
+                <section>
+                  <h3>Tableau de bord</h3>
+                  <ul>
+                    <li><a href="https://gitpod.io/workspaces">tableau de bord</a></li>
+                  </ul>
+                </section>
+                <section>
+                  <h3>Initialiser un environnement</h3>
+                  <pre>
+<code data-trim data-noescape>
+gitpod /workspace/gitpod $ gp --help
+Command line interface for Gitpod
+
+Usage:
+  gp [command]
+
+Available Commands:
+  await-port          Waits for a process to listen on a port
+  env                 Controls user-defined, persistent environment variables.
+  forward-port        Makes a port available on 0.0.0.0 so that it can be exposed to the internet
+  help                Help about any command
+  init                Create a Gitpod configuration for this project.
+  open                Opens a file in Gitpod
+  preview             Opens a URL in the IDE's preview
+  sync-await          Awaits an event triggered using gp sync-done
+  sync-done           Notifies the corresponding gp sync-await calls that this event has happened
+  url                 Prints the URL of this workspace
+
+Flags:
+  -h, --help   help for gp
+
+Use "gp [command] --help" for more information about a command.
+</code>
+                  </pre>
+                </section>
+				        <section>
+                    <h3>Prebuilds</h3>
+                    <section>
+                        Permet de construire un environnement à l'avance. Celui-ci démarre alors plus vite.
+                        <div>
+                            <ul>
+                                <li class="fragment">before : avant 'init' et 'command', exécuté à chaque démarrage</li>
+                                <li class="fragment">init : phase de construction de l'environnement</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section>
+                        Il faut donner les droits à gitpod sur ses repos via les intégrations
+                        <img class="r-stretch" data-src="img/gitpod-integrations.jpg" size="contain">  
+                    </section>
+                    <section>
+                        Peut être manuel : https://gitpod.io/#prebuild/https://bitbucket.org/stefdev49/gitpod/src/master/
+                        Ou via un webhook  
+                    </section>
+                    <section>
+                      <pre>
+<code data-trim data-noescape>
+tasks:
+  - name: installe les dépendances
+    # on enchaîne les commandes avec |
+    init: |
+      npm install
+      npm run build
+    command: |
+      export LIVERELOAD_URL="$(gp url 35729)/livereload.js?snipver=1&port=443"
+      npm run replace
+      npm start
+</code>
+                      </pre>
+                    </section>
+                  </section>
+				          <section>
+                    <h3>Workspace lourd</h3>
+                    On peut avoir un workspace plus riche utilisant des images se basant sur une autre image:
+                    <pre>
+<code data-trim data-noescape>                    
+# station de travail complète : workspace-full, et avec vnc en plus sur port 6080
+FROM gitpod/workspace-full-vnc:latest
+</code>
+                    </pre>
+                </section>
+				        <section>
+                    <h3>Application 'compagnon'</h3>
+                    <ul>
+                      <li class="fragment">Un utilitaire en ligne de commande permet de se connecter à son workspace distant</li>
+                      <li class="fragment">Il ouvre un tunnel entre l'espace local et le workspace</li>
+                      <li class="fragment">Problématique dans notre contexte</li>
+                    </ul>
+                </section>
+				        <section>
+                    <h3>Plans</h3>
+                    <img class="r-stretch" data-src="img/plans-gitpod.jpg" size="contain">
+                </section>
+                <section>
+                    <h3>gitlab</h3>
+                    gitlab propose l'intégration de gitpod
+                </section>
+                <section>
+                  <h3>Quelques soucis</h3>
+                  <ul>
+                    <li class="fragment">Les raccourcis clavier (ctrl-z)</li>
+                    <li class="fragment">Détection erreur dans init</li>
+                    <li class="fragment">Le live reload</li>
+                  </ul>
+                </section>
+                <section>
+                    <h3>Autres solutions</h3>
+                    <ul>
+                      <li class="fragment"><a href="https://www.theregister.com/2021/08/12/github_codespaces/">github propose les 'codespaces'</a></li>
+                      <li class="fragment"><a href="https://www.eclipse.org/che/">Eclipse che</a></li>
+                      <li class="fragment"><a href="https://coder.com/">coder.com</a></li>
+                      <li class="fragment"><a href="https://replit.com/">replit</a></li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Et après</h3>
+                    <ul>
+                        <li class="fragment">expérimentation en interne</li>
+                        <li class="fragment">dans quelques années ce genre d'environnement sera la norme</li>
+                        <li class="fragment">nouveau site central! :-)</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Questions ?</h3>
+                </section>
+                <section>
+                    <h5 class="secondary">Liens utiles</h5>
+                    <ul>
+                        <li><a href="https://www.gitpod.io/docs/references/gitpod-yml">référence fichier paramétrage .gitpod.yml</a></li>
+                        <li><a href="https://docs.gitlab.com/ee/integration/gitpod.html">intégration gitpod dans gitlab</a></li>
+                        <li><a href="https://github.com/features/codespaces">codespaces github</a></li>
+                    </ul>
+                </section>
+			</div>
+		</div>
+
+		<script src="{{livereload_url}}/livereload.js?snipver=1&port=443/livereload.js?snipver=1&port=443"></script>
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>

@@ -10,4 +10,4 @@ tmp/**
 node_modules/
 .sass-cache
 dist/
-index.html
+./index.html
